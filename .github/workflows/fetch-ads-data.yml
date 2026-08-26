@@ -1,0 +1,37 @@
+# Save this file as: .github/workflows/fetch-ads-data.yml
+# (GitHub requires workflows to live in that exact folder; this file is
+# named differently here only so it doesn't get lost outside that structure.)
+
+name: Fetch Meta Ads Data
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours
+  workflow_dispatch: {}       # lets you trigger it manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Fetch data from Meta
+        env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
+        run: python dashboard/fetch_meta_data.py
+
+      - name: Commit updated data.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dashboard/data.json
+          git diff --staged --quiet || git commit -m "Update ads data $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push

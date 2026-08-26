@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INDO BEVS — Recall Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canvas:#0E1116;
+    --surface:#151A21;
+    --surface-2:#1D242D;
+    --border:#262E38;
+    --text:#E7EDF3;
+    --text-muted:#8B96A3;
+    --text-faint:#5B6572;
+    --brocode:#4FD1C5;
+    --brocode-dim:#1F3B39;
+    --bongabonga:#F472B6;
+    --bongabonga-dim:#3D2432;
+    --risk-low:#34D399;
+    --risk-med:#FBBF24;
+    --risk-high:#F87171;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{background:var(--canvas); color:var(--text); font-family:'Inter',sans-serif;}
+  body{padding:40px 5vw 80px; min-height:100vh;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .display{font-family:'Space Grotesk',sans-serif;}
+
+  /* ---------- Header ---------- */
+  header{max-width:1280px; margin:0 auto 44px; display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap;}
+  .eyebrow{font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:.14em; color:var(--text-faint); text-transform:uppercase; display:flex; align-items:center; gap:8px; margin-bottom:10px;}
+  .live-dot{width:6px; height:6px; border-radius:50%; background:var(--risk-low); box-shadow:0 0 0 3px rgba(52,211,153,.15); animation:pulse 2.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1} 50%{opacity:.4}}
+  h1{font-size:clamp(28px,3.4vw,42px); font-weight:700; letter-spacing:-0.01em; line-height:1.05;}
+  h1 span{color:var(--brocode);}
+  .subtitle{color:var(--text-muted); font-size:14.5px; margin-top:10px; max-width:520px; line-height:1.5;}
+  .status-pill{font-family:'JetBrains Mono',monospace; font-size:11px; padding:8px 14px; border:1px solid var(--border); border-radius:100px; color:var(--text-faint); white-space:nowrap;}
+  .status-pill b{color:var(--text-muted); font-weight:500;}
+
+  /* ---------- KPI strip ---------- */
+  .kpi-strip{max-width:1280px; margin:0 auto 40px; display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:14px; overflow:hidden;}
+  .kpi{background:var(--surface); padding:24px 26px;}
+  .kpi-label{font-size:11.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.08em; margin-bottom:10px;}
+  .kpi-value{font-size:clamp(22px,2.4vw,30px); font-weight:700; letter-spacing:-0.01em;}
+  .kpi-sub{font-size:12px; color:var(--text-muted); margin-top:6px;}
+
+  /* ---------- Filter chips ---------- */
+  .controls{max-width:1280px; margin:0 auto 36px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .chip{font-family:'JetBrains Mono',monospace; font-size:12px; padding:9px 16px; border-radius:100px; border:1px solid var(--border); background:transparent; color:var(--text-muted); cursor:pointer; transition:all .15s ease; display:flex; align-items:center; gap:7px;}
+  .chip:hover{border-color:#3A4451; color:var(--text);}
+  .chip.active{background:var(--surface-2); color:var(--text); border-color:#3A4451;}
+  .chip .dot{width:7px; height:7px; border-radius:50%;}
+
+  /* ---------- Section heading ---------- */
+  .section-head{max-width:1280px; margin:0 auto 18px; display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap;}
+  .section-head h2{font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600;}
+  .section-head p{font-size:12.5px; color:var(--text-faint); max-width:420px; text-align:right;}
+
+  /* ---------- Recall Index (signature element) ---------- */
+  .recall-index{max-width:1280px; margin:0 auto 56px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:8px 0;}
+  .ri-row{display:grid; grid-template-columns:150px 1fr 96px; align-items:center; gap:16px; padding:13px 26px; border-bottom:1px solid var(--border);}
+  .ri-row:last-child{border-bottom:none;}
+  .ri-country{font-size:13.5px; font-weight:500; display:flex; align-items:center; gap:9px;}
+  .risk-flag{width:6px; height:6px; border-radius:50%; flex-shrink:0;}
+  .ri-track{position:relative; height:22px; background:var(--surface-2); border-radius:5px; overflow:hidden;}
+  .ri-fill{position:absolute; top:0; left:0; height:100%; border-radius:5px; display:flex; align-items:center; transition:width .5s ease;}
+  .ri-value{font-family:'JetBrains Mono',monospace; font-size:13px; text-align:right; color:var(--text-muted);}
+  .ri-value b{color:var(--text); font-weight:700;}
+
+  /* ---------- Country grid ---------- */
+  .country-grid{max-width:1280px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px;}
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; transition:border-color .15s ease;}
+  .card:hover{border-color:#3A4451;}
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;}
+  .card-title{font-family:'Space Grotesk',sans-serif; font-size:16.5px; font-weight:600;}
+  .risk-badge{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.05em; padding:4px 9px; border-radius:100px; text-transform:uppercase;}
+  .risk-badge.Low{background:rgba(52,211,153,.12); color:var(--risk-low);}
+  .risk-badge.Medium{background:rgba(251,191,36,.12); color:var(--risk-med);}
+  .risk-badge.High{background:rgba(248,113,113,.12); color:var(--risk-high);}
+
+  .brand-row{display:grid; grid-template-columns:74px 1fr; align-items:center; gap:10px; margin-bottom:8px;}
+  .brand-tag{font-family:'JetBrains Mono',monospace; font-size:10.5px; display:flex; align-items:center; gap:6px;}
+  .brand-tag .dot{width:7px; height:7px; border-radius:50%; flex-shrink:0;}
+  .brand-bar-track{height:6px; background:var(--surface-2); border-radius:3px; overflow:hidden;}
+  .brand-bar-fill{height:100%; border-radius:3px;}
+
+  .card-metrics{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:18px; padding-top:16px; border-top:1px solid var(--border);}
+  .metric-label{font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px;}
+  .metric-value{font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:700;}
+
+  footer{max-width:1280px; margin:56px auto 0; padding-top:22px; border-top:1px solid var(--border); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:12px; color:var(--text-faint);}
+  footer a{color:var(--text-muted);}
+
+  @media (max-width:720px){
+    .kpi-strip{grid-template-columns:repeat(2,1fr);}
+    .ri-row{grid-template-columns:110px 1fr 70px; gap:10px; padding:12px 16px;}
+    .section-head p{text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="eyebrow"><span class="live-dot"></span> Live from Meta Ads · Sep 2026 – Feb 2027</div>
+    <h1 class="display">Recall <span>Dashboard</span></h1>
+    <p class="subtitle">BroCode &amp; BongaBonga — tracking brand memorability, not followers, across 10 markets.</p>
+  </div>
+  <div class="status-pill" id="statusPill">Loading…</div>
+</header>
+
+<div class="kpi-strip" id="kpiStrip"></div>
+
+<div class="controls" id="brandFilter">
+  <button class="chip active" data-brand="All">All brands</button>
+  <button class="chip" data-brand="BroCode"><span class="dot" style="background:var(--brocode)"></span>BroCode</button>
+  <button class="chip" data-brand="BongaBonga"><span class="dot" style="background:var(--bongabonga)"></span>BongaBonga</button>
+</div>
+
+<div class="section-head">
+  <h2 class="display">Recall Index</h2>
+  <p>Ad recall lift generated per ₹1,000 of effective spend — the clearest read on where the budget is actually building memory, not just buying reach.</p>
+</div>
+<div class="recall-index" id="recallIndex"></div>
+
+<div class="section-head">
+  <h2 class="display">Country breakdown</h2>
+  <p>Effective spend split, reach, impressions and ad recall lift by market.</p>
+</div>
+<div class="country-grid" id="countryGrid"></div>
+
+<footer>
+  <span id="dataSourceNote">Loading data…</span>
+  <span>Objective: Brand Awareness / Reach, optimized for Ad Recall Lift</span>
+</footer>
+
+<script>
+const SAMPLE_DATA = [{"country": "USA", "brand": "BroCode", "budget": 154000, "delivery_rate": 0.93, "effective_spend": 143220, "cpm": 2010, "freq": 3.5, "impressions": 71254, "reach": 20358, "ad_recall_lift": 42625, "risk": "Low"}, {"country": "USA", "brand": "BongaBonga", "budget": 66000, "delivery_rate": 0.93, "effective_spend": 61380, "cpm": 2010, "freq": 3.5, "impressions": 30537, "reach": 8725, "ad_recall_lift": 18268, "risk": "Low"}, {"country": "UK", "brand": "BroCode", "budget": 126000, "delivery_rate": 0.93, "effective_spend": 117180, "cpm": 1081, "freq": 3.2, "impressions": 108400, "reach": 33875, "ad_recall_lift": 64812, "risk": "Low"}, {"country": "UK", "brand": "BongaBonga", "budget": 54000, "delivery_rate": 0.93, "effective_spend": 50220, "cpm": 1081, "freq": 3.2, "impressions": 46457, "reach": 14518, "ad_recall_lift": 27777, "risk": "Low"}, {"country": "Canada", "brand": "BroCode", "budget": 105000, "delivery_rate": 0.93, "effective_spend": 97650, "cpm": 1244, "freq": 3, "impressions": 78497, "reach": 26166, "ad_recall_lift": 46947, "risk": "Low"}, {"country": "Canada", "brand": "BongaBonga", "budget": 45000, "delivery_rate": 0.93, "effective_spend": 41850, "cpm": 1244, "freq": 3, "impressions": 33641, "reach": 11214, "ad_recall_lift": 20120, "risk": "Low"}, {"country": "Australia", "brand": "BroCode", "budget": 84000, "delivery_rate": 0.93, "effective_spend": 78120, "cpm": 1081, "freq": 3, "impressions": 72266, "reach": 24089, "ad_recall_lift": 43208, "risk": "Low"}, {"country": "Australia", "brand": "BongaBonga", "budget": 36000, "delivery_rate": 0.93, "effective_spend": 33480, "cpm": 1081, "freq": 3, "impressions": 30971, "reach": 10324, "ad_recall_lift": 18518, "risk": "Low"}, {"country": "New Zealand", "brand": "BroCode", "budget": 49000, "delivery_rate": 0.85, "effective_spend": 41650, "cpm": 909, "freq": 2.8, "impressions": 45820, "reach": 16364, "ad_recall_lift": 27401, "risk": "Medium"}, {"country": "New Zealand", "brand": "BongaBonga", "budget": 21000, "delivery_rate": 0.85, "effective_spend": 17850, "cpm": 909, "freq": 2.8, "impressions": 19637, "reach": 7013, "ad_recall_lift": 11743, "risk": "Medium"}, {"country": "UAE (Ajman)", "brand": "BroCode", "budget": 56000, "delivery_rate": 0.72, "effective_spend": 40320, "cpm": 718, "freq": 3.3, "impressions": 56156, "reach": 17017, "ad_recall_lift": 18327, "risk": "High"}, {"country": "UAE (Ajman)", "brand": "BongaBonga", "budget": 24000, "delivery_rate": 0.72, "effective_spend": 17280, "cpm": 718, "freq": 3.3, "impressions": 24067, "reach": 7293, "ad_recall_lift": 7855, "risk": "High"}, {"country": "Kenya", "brand": "BroCode", "budget": 42000, "delivery_rate": 0.85, "effective_spend": 35700, "cpm": 287, "freq": 2.3, "impressions": 124390, "reach": 54083, "ad_recall_lift": 74375, "risk": "Medium"}, {"country": "Kenya", "brand": "BongaBonga", "budget": 18000, "delivery_rate": 0.85, "effective_spend": 15300, "cpm": 287, "freq": 2.3, "impressions": 53310, "reach": 23178, "ad_recall_lift": 31875, "risk": "Medium"}, {"country": "Sri Lanka", "brand": "BroCode", "budget": 35000, "delivery_rate": 0.72, "effective_spend": 25200, "cpm": 211, "freq": 2.2, "impressions": 119431, "reach": 54287, "ad_recall_lift": 71591, "risk": "High"}, {"country": "Sri Lanka", "brand": "BongaBonga", "budget": 15000, "delivery_rate": 0.72, "effective_spend": 10800, "cpm": 211, "freq": 2.2, "impressions": 51185, "reach": 23266, "ad_recall_lift": 30682, "risk": "High"}, {"country": "Seychelles", "brand": "BroCode", "budget": 21000, "delivery_rate": 0.72, "effective_spend": 15120, "cpm": 239, "freq": 4.5, "impressions": 63264, "reach": 14059, "ad_recall_lift": 37800, "risk": "High"}, {"country": "Seychelles", "brand": "BongaBonga", "budget": 9000, "delivery_rate": 0.72, "effective_spend": 6480, "cpm": 239, "freq": 4.5, "impressions": 27113, "reach": 6025, "ad_recall_lift": 16200, "risk": "High"}, {"country": "Nepal", "brand": "BroCode", "budget": 28000, "delivery_rate": 0.72, "effective_spend": 20160, "cpm": 172, "freq": 2, "impressions": 117209, "reach": 58605, "ad_recall_lift": 70000, "risk": "High"}, {"country": "Nepal", "brand": "BongaBonga", "budget": 12000, "delivery_rate": 0.72, "effective_spend": 8640, "cpm": 172, "freq": 2, "impressions": 50233, "reach": 25116, "ad_recall_lift": 30000, "risk": "High"}];
+
+const COLORS = { BroCode: 'var(--brocode)', BongaBonga: 'var(--bongabonga)' };
+const COLORS_HEX = { BroCode: '#4FD1C5', BongaBonga: '#F472B6' };
+const RISK_COLOR = { Low: 'var(--risk-low)', Medium: 'var(--risk-med)', High: 'var(--risk-high)' };
+
+let currentBrand = 'All';
+let DATA = [];
+
+function fmt(n){
+  if (n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,'') + 'K';
+  return Math.round(n).toString();
+}
+function fmtMoney(n){
+  return '₹' + Math.round(n).toLocaleString('en-IN');
+}
+
+function filtered(){
+  return currentBrand === 'All' ? DATA : DATA.filter(d => d.brand === currentBrand);
+}
+
+function groupByCountry(rows){
+  const map = {};
+  rows.forEach(r => {
+    if (!map[r.country]) map[r.country] = [];
+    map[r.country].push(r);
+  });
+  return map;
+}
+
+function renderKPIs(){
+  const rows = filtered();
+  const spend = rows.reduce((s,r)=>s+r.effective_spend,0);
+  const reach = rows.reduce((s,r)=>s+r.reach,0);
+  const impressions = rows.reduce((s,r)=>s+r.impressions,0);
+  const recall = rows.reduce((s,r)=>s+r.ad_recall_lift,0);
+  const kpis = [
+    {label:'Effective Spend', value: fmtMoney(spend), sub: `${rows.length} country-brand lines`},
+    {label:'Est. Reach', value: fmt(reach) + ' people', sub:'Unique, frequency-adjusted'},
+    {label:'Est. Impressions', value: fmt(impressions), sub:'Awareness volume'},
+    {label:'Est. Ad Recall Lift', value: fmt(recall), sub:'Primary memorability metric'},
+  ];
+  document.getElementById('kpiStrip').innerHTML = kpis.map(k => `
+    <div class="kpi">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value mono">${k.value}</div>
+      <div class="kpi-sub">${k.sub}</div>
+    </div>`).join('');
+}
+
+function renderRecallIndex(){
+  const rows = filtered();
+  const grouped = groupByCountry(rows);
+  const items = Object.entries(grouped).map(([country, entries]) => {
+    const spend = entries.reduce((s,e)=>s+e.effective_spend,0);
+    const recall = entries.reduce((s,e)=>s+e.ad_recall_lift,0);
+    const risk = entries[0].risk;
+    const index = spend > 0 ? (recall / spend) * 1000 : 0;
+    return {country, index, risk};
+  }).sort((a,b) => b.index - a.index);
+
+  const max = Math.max(...items.map(i => i.index), 1);
+  document.getElementById('recallIndex').innerHTML = items.map(i => `
+    <div class="ri-row">
+      <div class="ri-country"><span class="risk-flag" style="background:${RISK_COLOR[i.risk]}"></span>${i.country}</div>
+      <div class="ri-track"><div class="ri-fill" style="width:${(i.index/max*100).toFixed(1)}%; background:linear-gradient(90deg, #4FD1C5, #F472B6);"></div></div>
+      <div class="ri-value"><b>${i.index.toFixed(0)}</b> /₹1K</div>
+    </div>`).join('');
+}
+
+function renderCountryGrid(){
+  const rows = filtered();
+  const grouped = groupByCountry(DATA); // always show both brands in card regardless of filter, dim inactive
+  const maxSpend = Math.max(...DATA.map(d=>d.effective_spend));
+  const countries = [...new Set(DATA.map(d=>d.country))];
+
+  document.getElementById('countryGrid').innerHTML = countries.map(country => {
+    const entries = grouped[country];
+    const risk = entries[0].risk;
+    const totalReach = entries.filter(e => currentBrand==='All' || e.brand===currentBrand).reduce((s,e)=>s+e.reach,0);
+    const totalImpr = entries.filter(e => currentBrand==='All' || e.brand===currentBrand).reduce((s,e)=>s+e.impressions,0);
+    const totalRecall = entries.filter(e => currentBrand==='All' || e.brand===currentBrand).reduce((s,e)=>s+e.ad_recall_lift,0);
+
+    const brandRows = entries.map(e => {
+      const dim = (currentBrand !== 'All' && currentBrand !== e.brand);
+      return `
+      <div class="brand-row" style="opacity:${dim ? 0.3 : 1}">
+        <div class="brand-tag"><span class="dot" style="background:${COLORS[e.brand]}"></span>${e.brand}</div>
+        <div class="brand-bar-track"><div class="brand-bar-fill" style="width:${(e.effective_spend/maxSpend*100).toFixed(1)}%; background:${COLORS[e.brand]}"></div></div>
+      </div>`;
+    }).join('');
+
+    return `
+    <div class="card">
+      <div class="card-top">
+        <div class="card-title">${country}</div>
+        <div class="risk-badge ${risk}">${risk} risk</div>
+      </div>
+      ${brandRows}
+      <div class="card-metrics">
+        <div>
+          <div class="metric-label">Reach</div>
+          <div class="metric-value mono">${fmt(totalReach)}</div>
+        </div>
+        <div>
+          <div class="metric-label">Impressions</div>
+          <div class="metric-value mono">${fmt(totalImpr)}</div>
+        </div>
+        <div>
+          <div class="metric-label">Recall Lift</div>
+          <div class="metric-value mono">${fmt(totalRecall)}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderAll(){
+  renderKPIs();
+  renderRecallIndex();
+  renderCountryGrid();
+}
+
+document.getElementById('brandFilter').addEventListener('click', (e) => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('#brandFilter .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  currentBrand = btn.dataset.brand;
+  renderAll();
+});
+
+async function loadData(){
+  try {
+    const res = await fetch('./data.json', {cache:'no-store'});
+    if (!res.ok) throw new Error('no live file');
+    const json = await res.json();
+    DATA = json.rows || json;
+    const updated = json.generated_at ? new Date(json.generated_at).toLocaleString() : 'unknown';
+    document.getElementById('statusPill').innerHTML = `<b>Live</b> · updated ${updated}`;
+    document.getElementById('dataSourceNote').textContent = `Live data from Meta Ads · last synced ${updated}`;
+  } catch (err) {
+    DATA = SAMPLE_DATA;
+    document.getElementById('statusPill').innerHTML = `<b>Sample data</b> · connect data.json`;
+    document.getElementById('dataSourceNote').textContent = 'Showing sample data from the approved plan — connect the GitHub Actions feed to go live.';
+  }
+  renderAll();
+}
+
+loadData();
+</script>
+</body>
+</html>
