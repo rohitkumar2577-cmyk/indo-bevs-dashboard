@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-04T12:01:08.205075Z",
+  "generated_at": "2026-09-04T18:01:12.964008Z",
   "rows": [
     {
       "country": "IN",
       "brand": "Unmapped",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 2811424,
+      "effective_spend": 2811498,
       "cpm": 7,
       "freq": 0.0,
-      "impressions": 516837189,
+      "impressions": 516867803,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
@@ -19,10 +19,10 @@
       "brand": "BroCode",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 773274,
+      "effective_spend": 773879,
       "cpm": 3,
       "freq": 0.0,
-      "impressions": 175307674,
+      "impressions": 175542483,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
@@ -344,10 +344,10 @@
       "brand": "BongaBonga",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 458215,
+      "effective_spend": 458430,
       "cpm": 18,
       "freq": 0.0,
-      "impressions": 67954659,
+      "impressions": 67971610,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
@@ -461,10 +461,10 @@
       "brand": "BroCode",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 18478,
+      "effective_spend": 18525,
       "cpm": 148,
       "freq": 0.0,
-      "impressions": 118884,
+      "impressions": 119213,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Low"
