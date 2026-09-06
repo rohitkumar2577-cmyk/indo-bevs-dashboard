@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T06:01:38.195617Z",
+  "generated_at": "2026-09-06T18:01:16.981225Z",
   "rows": [
     {
       "country": "IN",
@@ -9,7 +9,7 @@
       "effective_spend": 2811337,
       "cpm": 7,
       "freq": 0.0,
-      "impressions": 516903026,
+      "impressions": 516903028,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
@@ -22,7 +22,7 @@
       "effective_spend": 772857,
       "cpm": 3,
       "freq": 0.0,
-      "impressions": 175668494,
+      "impressions": 175668592,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
@@ -347,7 +347,7 @@
       "effective_spend": 459028,
       "cpm": 18,
       "freq": 0.0,
-      "impressions": 68015125,
+      "impressions": 68015128,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
