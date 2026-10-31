@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T11:16:46.145529Z",
+  "generated_at": "2026-10-31T16:21:17.971053Z",
   "rows": [
     {
       "country": "IN",
@@ -32,10 +32,10 @@
       "brand": "Unmapped",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 2781916,
+      "effective_spend": 2782366,
       "cpm": 26,
       "freq": 0.0,
-      "impressions": 510620098,
+      "impressions": 510629859,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
@@ -214,10 +214,10 @@
       "brand": "Unmapped",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 5549,
+      "effective_spend": 5647,
       "cpm": 272,
       "freq": 0.0,
-      "impressions": 10699,
+      "impressions": 10906,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Low"
@@ -344,10 +344,10 @@
       "brand": "BongaBonga",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 500439,
+      "effective_spend": 500576,
       "cpm": 18,
       "freq": 0.0,
-      "impressions": 70727681,
+      "impressions": 70729742,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
@@ -448,10 +448,10 @@
       "brand": "BongaBonga",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 29030,
+      "effective_spend": 29038,
       "cpm": 359,
       "freq": 0.0,
-      "impressions": 80819,
+      "impressions": 80830,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "High"
@@ -490,7 +490,7 @@
       "effective_spend": 12649,
       "cpm": 8,
       "freq": 0.0,
-      "impressions": 2599020,
+      "impressions": 2599022,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "High"
@@ -539,10 +539,10 @@
       "brand": "BroCode",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 4695,
+      "effective_spend": 4726,
       "cpm": 12,
       "freq": 0.0,
-      "impressions": 394903,
+      "impressions": 397281,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Medium"
