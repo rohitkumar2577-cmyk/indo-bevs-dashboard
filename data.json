@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-04T13:19:12.125817Z",
+  "generated_at": "2026-11-04T22:55:40.740944Z",
   "rows": [
     {
       "country": "IN",
@@ -32,10 +32,10 @@
       "brand": "Unmapped",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 2785682,
+      "effective_spend": 2785683,
       "cpm": 26,
       "freq": 0.0,
-      "impressions": 510318855,
+      "impressions": 510318883,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
@@ -214,10 +214,10 @@
       "brand": "Unmapped",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 7520,
-      "cpm": 263,
+      "effective_spend": 7521,
+      "cpm": 262,
       "freq": 0.0,
-      "impressions": 15028,
+      "impressions": 15031,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Low"
@@ -542,7 +542,7 @@
       "effective_spend": 5116,
       "cpm": 12,
       "freq": 0.0,
-      "impressions": 430467,
+      "impressions": 430491,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Medium"
