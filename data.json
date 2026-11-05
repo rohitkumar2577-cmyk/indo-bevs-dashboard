@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-05T03:49:18.970726Z",
+  "generated_at": "2026-11-05T13:32:08.139643Z",
   "rows": [
     {
       "country": "IN",
@@ -35,7 +35,7 @@
       "effective_spend": 2785683,
       "cpm": 26,
       "freq": 0.0,
-      "impressions": 510318883,
+      "impressions": 510318884,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
