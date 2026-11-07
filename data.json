@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-11-07T17:13:54.735685Z",
+  "generated_at": "2026-11-07T21:06:51.640614Z",
   "rows": [
     {
       "country": "IN",
       "brand": "BroCode",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 692029,
+      "effective_spend": 688367,
       "cpm": 4,
       "freq": 0.0,
-      "impressions": 153054918,
+      "impressions": 152293640,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
@@ -32,10 +32,10 @@
       "brand": "Unmapped",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 2781842,
+      "effective_spend": 2778208,
       "cpm": 26,
       "freq": 0.0,
-      "impressions": 509801030,
+      "impressions": 509215201,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
