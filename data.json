@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-10T13:49:08.338953Z",
+  "generated_at": "2026-11-10T22:35:04.469164Z",
   "rows": [
     {
       "country": "IN",
@@ -32,10 +32,10 @@
       "brand": "Unmapped",
       "budget": null,
       "delivery_rate": null,
-      "effective_spend": 2775879,
+      "effective_spend": 2775712,
       "cpm": 26,
       "freq": 0.0,
-      "impressions": 508842728,
+      "impressions": 508839767,
       "reach": 0,
       "ad_recall_lift": null,
       "risk": "Unknown"
